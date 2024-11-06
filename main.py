@@ -1,10 +1,11 @@
 from email.message import EmailMessage
 import ssl
 import smtplib
+import imaplib
 
-email_sender = "mailbotj@gmail.com"
-email_sender_password = "lgizhcbskstvgjjj"
 email_reciever = "dave_u@outlook.com"
+
+lista_de_correos = ["jose-esteva@hybridge.com"]
 
 asunto = "Mira esta notificacion"
 
@@ -12,18 +13,28 @@ cuerpo = '''
    Hola que pedo 
 '''
 
-email = EmailMessage()
+def contestar_correos(mensaje):
+    pass
 
-email["From"] = email_sender
 
-email["To"] = email_reciever
+def enviar_correo( mensaje , asunto , destinatarios ):
+    email_sender = "mailbotj@gmail.com"
+    email_sender_password = "lgizhcbskstvgjjj"
+    email = EmailMessage()
 
-email["Subject"] = cuerpo
+    email["From"] = email_sender
 
-email.set_content(cuerpo)
+    email["To"] = ",".join(destinatarios)
 
-contexto = ssl.create_default_context()
+    email["Subject"] = cuerpo
 
-with smtplib.SMTP_SSL("smtp.gmail.com", context = contexto) as smtp:
-    smtp.login( email_sender, email_sender_password )
-    smtp.sendmail(email_sender, email_reciever, email.as_string())
+    email.set_content( mensaje )
+
+    contexto = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", context=contexto) as smtp:
+        smtp.login(email_sender, email_sender_password)
+        smtp.sendmail(email_sender, destinatarios, email.as_string())
+
+
+enviar_correo(cuerpo, asunto, lista_de_correos)
